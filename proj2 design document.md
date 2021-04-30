@@ -16,7 +16,7 @@ This project aims to perform enhancements to the bash. We hope to add or improve
 - Learn how to expand bash functions with shell script
 - Install these plugins on `zsh` and see how they work
 - Go through source code of these plugins
-- Transfer these functions to bash
+- Reimplement these functions on bash-shell
 
 ## Implementation
 
@@ -45,9 +45,9 @@ Detailed progress is listed in **Description**.
 
 ## Division of labor
 
-| ID       | Name   | Division |
-| :------- | :----- | :------- |
-| 11812613 | 香佳宏 |          |
-| 11812106 | 马永煜 |          |
-| 11812425 | 张佳雨 |          |
+| ID       | Name   | Division                           |
+| :------- | :----- | :--------------------------------- |
+| 11812613 | 香佳宏 | Auto suggestions & Split screen    |
+| 11812106 | 马永煜 | Syntax highlighting & Split screen |
+| 11812425 | 张佳雨 | Auto jump & Split screen           |
 
