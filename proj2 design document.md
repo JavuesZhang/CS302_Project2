@@ -16,7 +16,7 @@ This project aims to perform enhancements to the bash. We hope to add or improve
 - Learn how to expand bash functions with shell script
 - Install these plugins on `zsh` and see how they work
 - Go through source code of these plugins
-- Transfer these functions to bash
+- Reimplement these features in bash.
 
 ## Implementation
 
