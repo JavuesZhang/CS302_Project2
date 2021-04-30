@@ -6,17 +6,28 @@ Linux, known as GNU/Linux, is a multi-user, multi-tasking, multi-threaded and mu
 
 Bash is a Unix shell and command language for the GNU Project as a free software replacement for the Bourne shell. It has been used as the default login shell for most Linux distributions. 
 
-This project aims to perform enhancements to the bash. We hope to add or improve some functions of the current bash so that user experience can be improved during using the shell.
+This project aims to perform enhancements to the bash. We hope to add or improve some features of the current bash so that user experience can be improved during using the shell.
 
 ## Description
 
-`bash` is now powerful but still not easy to use compared to `zsh`. We decided to improve `bash` with some functions implemented in `zsh` including `auto-jump`, `auto-suggestions`, `syntax-highlighting`, and `screen/tmux`. We divided the project into multiple small goals.
+`bash` is now powerful but still not easy to use compared to `zsh`. We decided to improve `bash` with some features implemented in `zsh` including `auto-jump`, `auto-suggestions`, `syntax-highlighting`, and `screen/tmux`. 
+
+Here's the basic description about these features:
+1. auto-jump: a faster way to navigate the filesystem. It works by maintaining a database of the directories the user uses the most from the command line.
+2. auto-suggestions: It suggests commands as the user type based on history and completions.
+3. syntax-highlighting: It provides syntax highlighting for the shell. It enables highlighting of commands whilst they are typed at a shell prompt into an interactive terminal. This helps in reviewing commands before running them, particularly in catching syntax errors.
+4. screen/tmux: The most widely used terminal multiplexer.
+
+We divided the project into multiple small goals.
 
 - Learn bash-shell programming
-- Learn how to expand bash functions with shell script
+- Learn how to expand bash command with C/C++ program & shell script
 - Install these plugins on `zsh` and see how they work
 - Go through source code of these plugins
-- Reimplement these functions on bash-shell
+- Reimplement these features on bash-shell
+
+Here we give some photos about these features:
+[TODO]
 
 ## Implementation
 
@@ -31,6 +42,8 @@ We refer to source code of the extensions:
 Also, we have explored an valuable blog:
 
 - [Bash Scripting: Everything you need to know about Bash-shell programming](https://medium.com/sysf/bash-scripting-everything-you-need-to-know-about-bash-shell-programming-cd08595f2fba)
+
+In addition, we may use some third-party libraries and api to simplify the implementation of these features. We plan to implement these features one by one from easy to hard since we still need to learn a lot about linux kernel and shell&.C programming. Due to this consideration, we may first try to implement 3 plugins then have a try of implementing the Split screen feature. 
 
 ## Expected goals
 
