@@ -13,10 +13,10 @@ This project aims to perform enhancements to the bash. We hope to add or improve
 `bash` is now powerful but still not easy to use compared to `zsh`. We decided to improve `bash` with some features implemented in `zsh` including `auto-jump`, `auto-suggestions`, `syntax-highlighting`, and `screen/tmux`. 
 
 Here's the basic description about these features:
-1. auto-jump: a faster way to navigate the filesystem. It works by maintaining a database of the directories the user uses the most from the command line.
-2. auto-suggestions: It suggests commands as the user type based on history and completions.
-3. syntax-highlighting: It provides syntax highlighting for the shell. It enables highlighting of commands whilst they are typed at a shell prompt into an interactive terminal. This helps in reviewing commands before running them, particularly in catching syntax errors.
-4. screen/tmux: The most widely used terminal multiplexer.
+1. `auto-jump`: a faster way to navigate the filesystem. It works by maintaining a database of the directories the user uses the most from the command line.
+2. `auto-suggestions`: It suggests commands as the user type based on history and completions.
+3. `syntax-highlighting`: It provides syntax highlighting for the shell. It enables highlighting of commands whilst they are typed at a shell prompt into an interactive terminal. This helps in reviewing commands before running them, particularly in catching syntax errors.
+4. `screen/tmux`: The most widely used terminal multiplexer.
 
 We divided the project into multiple small goals.
 
@@ -27,7 +27,11 @@ We divided the project into multiple small goals.
 - Reimplement these features on bash-shell
 
 Here we give some photos about these features:
-[TODO]
+
+1. `auto-jump`:![image-20210430225012309](/Users/ghabi/Library/Application Support/typora-user-images/image-20210430225012309.png)
+2. `auto-suggestions`:![image-20210430225131192](/Users/ghabi/Library/Application Support/typora-user-images/image-20210430225131192.png)
+3. `syntax-highlighting`![image-20210430225419967](/Users/ghabi/Library/Application Support/typora-user-images/image-20210430225419967.png)
+4. Screen ![How to Use 'Tmux Terminal' to Access Multiple Terminals Inside a Single  Console](https://www.tecmint.com/wp-content/uploads/2016/01/Tmux-Manage-Multiple-Linux-Terminals.png)
 
 ## Implementation
 
@@ -63,4 +67,5 @@ Detailed progress is listed in **Description**.
 | 11812613 | 香佳宏 | Auto suggestions & Split screen    |
 | 11812106 | 马永煜 | Syntax highlighting & Split screen |
 | 11812425 | 张佳雨 | Auto jump & Split screen           |
+
 
