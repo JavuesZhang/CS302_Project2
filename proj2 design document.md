@@ -28,9 +28,9 @@ We divided the project into multiple small goals.
 
 Here we give some photos about these features:
 
-1. `auto-jump`:![image-20210430225012309](/Users/ghabi/Library/Application Support/typora-user-images/image-20210430225012309.png)
-2. `auto-suggestions`:![image-20210430225131192](/Users/ghabi/Library/Application Support/typora-user-images/image-20210430225131192.png)
-3. `syntax-highlighting`![image-20210430225419967](/Users/ghabi/Library/Application Support/typora-user-images/image-20210430225419967.png)
+1. `auto-jump`:![image-20210430225012309](https://github.com/JavuesZhang/CS302_Project2/blob/main/photo/image-20210430225012309.png)
+2. `auto-suggestions`:![image-20210430225131192](https://github.com/JavuesZhang/CS302_Project2/blob/main/photo/image-20210430225131192.png)
+3. `syntax-highlighting`![image-20210430225419967](https://github.com/JavuesZhang/CS302_Project2/blob/main/photo/image-20210430225419967.png)
 4. Screen ![How to Use 'Tmux Terminal' to Access Multiple Terminals Inside a Single  Console](https://www.tecmint.com/wp-content/uploads/2016/01/Tmux-Manage-Multiple-Linux-Terminals.png)
 
 ## Implementation
