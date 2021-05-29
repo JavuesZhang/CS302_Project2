@@ -45,9 +45,151 @@ So the final goals we achieved are:
 
 ### 3. Auto jump
 
+Auto jump uses a mix of shell and python. 
 
+Directory tree:
+
+```
+.myautojump
+├── bin
+│   ├── data.txt
+│   └── myautojump
+└── myautojump.bash
+```
+
+`myautojump.bash ` is sourced every time a new terminal is opened, which defines some aliases of option:
+
+```
+ - aj_add_to_data()  :  automatically add directory to data file during shell use
+ 
+ - aj()              :  myautojump main function
+ - ajc()             :  use myautojump to jump to child directory
+ - ajo()             :  use file explorer to open the directory aj() will jump to
+ - ajoc()            :  use file explorer to open the directory ajc() will jump to
+```
+
+In the functions, if there are any arguments it will run no-output-command, while if there is no arguments it will give an output representing a path you may want to jump to, then the script will change directory on bash or on file explorer as required.
+
+`myautojump` is in python and suffix `.py` is omitted for convenience. All logics are defined here. 
+
+The main logic is about finding paths with abbreviated or incorrect path arguments. You may want to:
+
+```sh
+cd ~/OS/Labs/Lab1
+```
+
+Unluckily you input one of the following commands but you still want to get the correct outcome:
+
+```sh
+cd ~/os/lqbs/lab1
+cd ~/OS/labs/lan1
+cd os labs lab1
+cd o l 1
+```
+
+All these can be solved if `~/OS/Labs/Lab1` is in the data. Data is located in `.myautojump/bin/data.txt` and follows the format:
+
+```
+/home/username/OS	21
+/home/username/CS302	8
+/home/username/Videos	8
+/home/username/Music	4
+/home/username/.myautojump	2
+/home/username/.myautojump/bin	0
+/home/username/foo/bar	0
+```
+
+Each line represents an entry, the first element is a recorded path and the second is its weight, which would be used to evaluted how this path is possible to be chosen. When bash works on a new directory, it will also add the working directory automatically to this data file with the help of shell file.
+
+Also, you can use other arguments to add directories, increase or decrease the weight of current working directory, show current data or version. For more use `myautojump -h` to see how it works.
+
+For details of finding paths, some functions are defined in `myautojump`. There are three functions defined to find paths with different mechanisms:
+
+1. ```
+   find_matches()
+   ```
+
+   Use regex to perform relatively precise search. For example, if input is `aj o l` and the separator is `/`, the regex would be `o[^/]*/[^/]*l[^/]*$`, which means that `o` and `l` are located in two consecutive directories and `l` is located in the last directory.
+
+2. ```
+   find_matches_fuzzy()
+   ```
+
+   Use `fuzz` from `fuzzywuzzy` to perform fuzzy search. `fuzzywuzzy` is an easy-to-use fuzzy string matching toolkit. 5K stars on github, it calculates the difference between two sequences based on the Levenshtein Distance algorithm. 
+
+   This function takes the last several directories in each path in data to compare with the query string. For example, if input is `aj myautpjumo bun`, there are two arguments representing path so search in data for whose last two directories is more matched with `myautpjumo/bun`. Obviously, `.myautojump/bin` is matched so `/home/username/.myautojump/bin` is one answer.
+
+3. ```
+   find_matches_fuzzy2()
+   ```
+
+   Similar to 2. but more relaxed. No number of directories is limited so just compare the paths in data with input path to see whether an path is one answer.
+
+Finally, `myautojump` integrates the results of these three functions and evaluates a best one to output.
 
 ### 4. ohsh*t
+
+ ohsh*t uses a mix of shell and python. 
+
+Directory tree:
+
+```
+.ohsht
+├── bin
+│   ├── classes.py
+│   ├── ohsht
+│   └── rules
+│       ├── sl_ls.py
+│       ├── sudo.py
+|        .
+|        .
+└── ohsht.bash
+```
+
+`ohsht.bash` defines an alias for `ohsht` --> `sht`:
+
+```sh
+sht() {
+    cmd=$(fc -ln -1)
+    out=$(ohsht ${@} "$cmd")
+    echo -e "\033[32mDon't worry! Calm down plz. I'll try to fix it for u~\033[0m"
+    echo -e "\033[42;37m[Corrected command] $out \033[0m"
+    if [[ $out == '' ]]; then
+        echo "Sorry, there seems no fix..."
+    else
+        perl -e 'require "sys/ioctl.ph"; ioctl(STDIN, &TIOCSTI, $_) for split "", join " ", @ARGV' $out
+    fi
+}
+```
+
+Here we use `fc -ln -1` to get the last command run. Then put arguments and the command which needs to be fixed into `sht`. Also, we put the output into the input buffer with the help of **TIOCSTI** so that user will easily run the fixed command by just press `Enter`. **TIOCSTI** is an ioctl, which allows the injection of terminal commands.
+
+In `classes.py`, we defined some classes to do object-oriented programming. 
+
+```python
+class Command(object):
+    def __init__(self, script, output)
+    
+class Rule(object):
+    def __init__(self, match, get_new_command, priority)
+    
+class CorrectedCommand(object):
+    def __init__(self, script, priority):
+```
+
+`Command` represents a command we need to fix. Sometimes its output contains information which help us to fix so output is also an important attribute of this class.
+
+`Rule` represents a rule which is followed when fixing a command. It can be self-defined in `.ohsht/rules`. A simple example is given (`sl_ls.py`):
+
+```python
+def match(command):
+    return command.script == 'sl'
+
+def get_new_command(command):
+    return 'ls'
+```
+
+ When typing fast, `ls` may be mistyped as `sl` so this rule is produced. When command matches this rule, a new command fixed from the previous command will be returned.
 
 
 
