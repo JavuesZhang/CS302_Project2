@@ -189,7 +189,17 @@ def get_new_command(command):
     return 'ls'
 ```
 
- When typing fast, `ls` may be mistyped as `sl` so this rule is produced. When command matches this rule, a new command fixed from the previous command will be returned.
+ When typing fast, `ls` may be mistyped as `sl` so this rule is produced. When command matches this rule, a new command fixed from the previous command will be returned. Other rules are similar.
+
+`CorrectedCommand` represents a fixed command. It necessarily needs a priority because sometimes the fix will conflict with each other such as fixing `sl` to `ls` or `sl.py`.
+
+In `ohsht`, rules under `.ohsht/rules` are all imported and used to check whether the command to be fixed matches the rules. If matched, a fixed command will be produces by `get_new_command` from this rule. Eventually the command which has the highest priority will be outputed as the result. Also, the program does not run the fixed command immediately, but it still needs user's confirmation which in result keeps the system safe relatively.
+
+Moreover, you can still add your own rules in `.ohsht/rules`. It should meets these following requirements:
+
+1. Its suffix is `.py`;
+2. It has a function `match(command:Command) -> bool` to determine whether the command to be fixed matches this situation or rule;
+3. It has a function `get_new_command(command:Command) -> str` to fix the command with your own strategies.
 
 
 
