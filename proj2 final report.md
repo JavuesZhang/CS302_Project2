@@ -1,10 +1,11 @@
 # 2021S-CS302 Project2 Final Report
 
-Group members:
-
-- 11812613 香佳宏
-- 11812106 马永煜
-- 11812425 张佳雨
+> Group members:
+>
+> - 11812613 香佳宏
+> - 11812106 马永煜
+> - 11812425 张佳雨
+>
 
 ## Background
 
