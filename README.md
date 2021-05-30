@@ -30,7 +30,7 @@ Here's the basic description about these features:
 Download `code/.myautojump.tar.gz` to your Ubuntu home and untar it:
 
 ```sh
-tart -zxvf .myautojump.tar.gz
+tar -zxvf .myautojump.tar.gz
 ```
 
 Open your `~/.bashrc` and put the following command in the last:
@@ -63,7 +63,7 @@ Refer to `video/auto-suggestion.mp4` and Auto-Suggestions/README to see how it w
 Download `code/.syntax-highlighting.tar.xz` to your Ubuntu home and untar it:
 
 ```sh
-tart -xvJf .syntax-highlighting.tar.xz
+tar -xvJf .syntax-highlighting.tar.xz
 ```
 
 Open your `~/.bashrc` and put the following command in the last:
@@ -79,7 +79,7 @@ Refer to `video/syntax-highlighting.mp4` to see how it works.
 Download `code/.ohsht.tar.gz` to your Ubuntu home and untar it:
 
 ```sh
-tart -zxvf .ohsht.tar.gz
+tar -zxvf .ohsht.tar.gz
 ```
 
 Open your `~/.bashrc` and put the following command in the last:
