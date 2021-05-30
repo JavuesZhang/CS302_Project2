@@ -41,7 +41,48 @@ So the final goals we achieved are:
 
 ### 2. Syntax highlighting
 
+Different from zshell, a newer shell to bash, bash cannot get the user input easily before users click the 'enter' and it is also hard to change the color of input text. Therefore, I decided to try to get the input shell command after clicking 'enter' and output the syntax highlighting of this command after the normal output of command.
 
+In any computer languages, their syntax are corresponding to not only their before and later contexts, and so as Bash. In my preliminary design, the program should scan each word of the input sentences one by one and confirm their highlighting styles. Since for each word, its syntax-highlighting is based on last words,  which can be seen as a kind of state, I think it is necessary to design a state machine used for scanning each word. When the scanned word changed, the state changed.
+
+Generally, there're 4 states:
+
+- `:start:`. It represents that it is command word.
+- `:sudo_opt:`. It represents a leading-dash option to a pre-command, whether it takes an argument or not. (Example: `sudo`'s `-u` or `-i`.)
+- `:sudo_arg:`. It represents the argument to a pre-command's leading-dash option, when given as a separate word. (Example: "foo" in `-u foo`.)
+- `:regular:`. It represents that it is not a command word, which may be command delimiters or other strings.
+
+In the beginning, the state of a word is not yet known. The state of this word and next word may contain multiple states. For example, after `sudo -i`, the next word may be either another leading-dash flags or a command name, hence the state would include both `:start:` and `:sudo_opt:`. 
+
+The judgement principle is very complex and comprehensive syntax implementation is difficult to make progress. Hence, the implemented case of syntax highlighting is mainly as below.
+
+1. **Highlighting for all kinds of commands**. 
+
+   For the word which is seems to be a command, the program will check all kinds of command list, which is obtained from command `compgen`. Built-in command list from `compgen -b`, global function list from `compgen -A function` and all commands are from `compgen -A command`. For each list, the color of highlighting is different.
+
+2. **Highlighting for all kinds of brackets**.
+
+   For the brackets in total, I used simple stack to store and judge each brackets' level.
+
+   For the brackets followed with other reserved word like `$` or `=`, I highlight them separately.
+
+3. **Highlighting for all kinds of command separators**.
+
+   For special words like ` '|' '||' ';' '&' '&&' $'\n' '|&' '&!' '&|'`, each of them works as different jobs in different cases. For example, for `'|'`, when it used as command separators, it is necessary to highlight it out. But when it is used in `(( ))` or `&{ }`, the case will be quite different. I use light-white for these special words.
+
+4. **Highlighting for assignment**.
+
+   For simple assignment of an integer or a string, I set their color be the default one since there is no need for users to know something about these simple assignment. But for assignment of an array or other more complex situation, for example, `a=( "1" "2" )`, I will make the brackets brighter or even yellow.
+
+5. **Highlighting for some common keywords**.
+
+   For some common keywords like `'case' 'do' 'done' 'elif' 'else' 'esac' 'fi' 'in' 'if' 'for' 'function' 'select' 'then' 'time' 'until' 'while'`, each of them will be highlighted as color brown. What is the most important is that I use a stack to store the state of words, for example, when I meets `do`, I will push character `D` into stack; when I meets done, I will check if the top of stack is "D". If not, I will mark this words.
+
+   ![keyword_highlighting](G:\大三下\OS\project2\CS302_Project2\photo\keyword_highlighting.png)
+
+6. **Highlighting for error**.
+
+   For some obviously syntax error, such as command not found, brackets not match, I will make the place of error red.
 
 ### 3. Auto jump
 
