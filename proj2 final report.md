@@ -41,7 +41,7 @@ So the final goals we achieved are:
 
 ### 2. Syntax highlighting
 
-Different from zshell, a newer shell to bash, bash cannot get the user input easily before users click the 'enter' and it is also hard to change the color of input text. Therefore, I decided to try to get the input shell command after clicking 'enter' and output the syntax highlighting of this command after the normal output of command.
+Different from zshell, a newer shell to bash, bash cannot get the user input easily before users click the 'enter' and it is also hard to change the color of input text. Therefore, I decided to try to get the input shell command after clicking 'enter' and output the syntax highlighting of this command after the normal output of command. This function is implemented at `bash-preexec.sh` which is from https://github.com/rcaloras/bash-preexec?tdsourcetag=s_pcqq_aiomsg.
 
 In any computer languages, their syntax are corresponding to not only their before and later contexts, and so as Bash. In my preliminary design, the program should scan each word of the input sentences one by one and confirm their highlighting styles. Since for each word, its syntax-highlighting is based on last words,  which can be seen as a kind of state, I think it is necessary to design a state machine used for scanning each word. When the scanned word changed, the state changed.
 
@@ -276,3 +276,8 @@ At the same time, even though teamwork is not a new thing, it is a new experienc
 | 11812106 | 马永煜 | Syntax highlighting & ohsh*t |
 | 11812425 | 张佳雨 | Auto jump & ohsh*t           |
 
+> ### References
+> https://github.com/zsh-users/zsh-syntax-highlighting  
+> https://github.com/wting/autojump  
+> https://github.com/nvbn/thefuck  
+>
