@@ -22,7 +22,7 @@ Here's the basic description about these features:
 2. `auto-suggestions`: It suggests commands as the user type based on history and completions.
 3. `syntax-highlighting`: It provides syntax highlighting for the shell. It enables highlighting of commands whilst they are typed at a shell prompt into an interactive terminal. This helps in reviewing commands before running them, particularly in catching syntax errors.
 4. `ohsh*t`: It provides auto fix for your last error command. Only need to input `sht` and it will fix command for you.
-
+5. `auto-doit`: It provides alias management for you with auto-suggestion and color high-lighting.
 ## Usage
 
 ### 1. Auto jump
