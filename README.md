@@ -47,6 +47,18 @@ Refer to `video/auto-suggestion-1.mp4` and `video/auto-suggestion-2.mp4` to see 
 
 ### 3. Syntax highlighting
 
+Download `code/.syntax-highlighting.tar.xz` to your Ubuntu home and untar it:
+
+```sh
+tart -xvJf .syntax-highlighting.tar.xz
+```
+
+Open your `~/.bashrc` and put the following command in the last:
+
+```sh
+source ~/.syntax-highlighting/syntax-highlighting.sh
+```
+
 Refer to `video/syntax-highlighting.mp4` to see how it works.
 
 ### 4. Auto jump
