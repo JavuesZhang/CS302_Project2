@@ -43,7 +43,20 @@ Refer to `video/auto-jump.mp4` to see how it works.
 
 ### 2. Auto suggestions
 
-Refer to `video/auto-suggestion-1.mp4` and `video/auto-suggestion-2.mp4` to see how it works.
+Download `code/.auto-suggestions.tar.gz` to your Ubuntu home and untar it:
+
+```sh
+tar -zxvf .auto-suggestions.tar.gz
+```
+
+```shell
+cd ./.auto-suggestions
+bash ./install.sh
+sudo cp ./as /usr/bin/
+source ~/.bashrc
+```
+
+Refer to `video/auto-suggestion.mp4` and Auto-Suggestions/README to see how it works.
 
 ### 3. Syntax highlighting
 
@@ -61,7 +74,7 @@ source ~/.syntax-highlighting/syntax-highlighting.sh
 
 Refer to `video/syntax-highlighting.mp4` to see how it works.
 
-### 4. Auto jump
+### 4. Auto Correct
 
 Download `code/.ohsht.tar.gz` to your Ubuntu home and untar it:
 
@@ -77,3 +90,18 @@ source ~/.ohsht/ohsht.bash
 
 Refer to `video/ohsht.mp4` to see how it works.
 
+### 5. Auto Do it
+
+Download `code/.auto-suggestions.tar.gz` to your Ubuntu home and untar it:
+
+```sh
+tar -zxvf .auto-suggestions.tar.gz
+```
+
+Open your `~/.bashrc` and put the following command in the last:
+
+```sh
+source ./.auto-suggestions/ad
+```
+
+Refer to `video/auto-suggestion.mp4` and Auto-Suggestions/README to see how it works.
