@@ -23,6 +23,7 @@ In the project, we expect to improve `bash` with the following functions:
 - Syntax highlighting
 - Auto jump
 - Split screen
+- Auto Doit
 
 However, during the development process we found that each of them was much more difficult and would take much more time than we thought, so we abandoned the goal of split screen, which is far more complicated than the other three functions. Instead, we found thefuck, a very useful tool that helps automatically repair commands, and we implemented a similar tool, named ohsh*t, by referring to the source code.
 
@@ -32,11 +33,84 @@ So the final goals we achieved are:
 - Syntax highlighting
 - Auto jump
 - ohsh*t
+- Auto Doit
 
 ## Implementation
 
 ### 1. Auto suggestions
+1. Feature 1: check list history CMDs and list 50 suggestion commands
 
+   First I get the user input command by `${COMP_LINE}` and we replace the " "(whitespace) with `blank="\\\\\\ "` for escape. Then remove the header command  `as `  from the curr command.
+
+   With the help of `complegen` , we input the history 1000 lines into it by command `fc -nl -1000` and get the suggestions back. If the suggestion list is too much, we just thin this list.
+
+   Finally return the suggestions to the complete method for user to <TAB>
+
+```shell
+os@ubuntu:/data/auto-suggestion$ as c
+c                                        cd\ /data/auto-suggestion/
+cat\ \ ~/.inputrc\                       cd\ /root/
+cat\ ~/.inputrc\                         cd\ -r\ os-proj\ /data/auto-suggestion/
+cat\ /root/.inputrc                      chmod\ 777\ /usr/bin/as
+cd\ ..                                   complete
+cd\ ~                                    complete\ |\ grep\ as
+cd\ auto-suggestion/                     
+os@ubuntu:/data/auto-suggestion$ as cat\ 
+cat\ \ ~/.inputrc\   cat\ ~/.inputrc\     cat\ /root/.inputrc
+```
+
+2. Feature 2: give auto-suggestions when user typing:
+
+   When user press <TAB>, we get the interrupt here and the args list are convert into the string, in this means we can auto-compelte the user input from history.
+
+```shell
+os@ubuntu:/data/auto-suggestion$ as s
+s                                              source\ ./install.sh\ 
+source\ ad                                     sudco\ cat\ /root/.inputrc
+source\ ad\                                    sudo\ 
+source\ ~/.bash                                sudo\ bash\ ./install.sh\                            
+os@ubuntu:/data/auto-suggestion$ as sud
+sudco\ cat\ /root/.inputrc                     sudo\ cd\ /root/
+sudo\                                          sudo\ chmod\ 777\ /usr/bin/as
+sudo\ bash\ ./install.sh\                      sudo\ cp\ /data/auto-suggestion/as\ /usr/bin/
+os@ubuntu:/data/auto-suggestion$ as sudo\ 
+```
+
+3. Feature 3:  exec the command that auto-suggestion
+
+   In this feature, we pass the auto-suggestion cmd to `as` , which will be exec in shell. And here we change the bash config with `- i` since we want to show the result into user's shell.
+
+```shell
+os@ubuntu:/data/auto-suggestion$ as ls 
+auto-suggestions.tar.gz  bash_completion  cd.bash  dothis.bkp  goto.bash  readin.bash  test.bash
+```
+Well, although only 50 lines of code, I search revalent information everywhere and it cost nearly 10 days for me to implement it. (also broken 3 virtue machines)
+
+And actually it is impossible. This is zsh auto-suggestions
+
+We can see that the suggestions auto appears in user command line and if we press :arrow_right:, the suggestions will auto go into your input command line.
+
+But:
+
+	1. Bash do not support user customized command input, not to say show color in input buffer.
+	2. Bash do not give built-in method to interrupt when user press the keyboards.
+	3. Bash still has lots of strange behavior and bugs.
+
+After trying & knowing all of these, I decided to use Bash built-in **complete** method which relies on Tabs to auto-complement.
+
+So:
+
+1. First I install my script **as** into /usr/bin folder
+2. Then source the **as-completion** method
+3. completion method will interrupt when user typed "as <Tab>"
+4.  **as-completion** get the user input find similar cmd in history
+5. return the suggestions to complete method
+
+But problem is the bash complete only support single word completion, which means it cannot complete a whole command. So I choose to add "\\" to transfer whitespace. But some known bugs stop me: (a discussion with overwriting about complete method):
+
+This is because bash complete method directly replace the last word when trying to complete, so sometimes it remove my last command or just appending them
+
+After several days wasting on this by searching and doing all kinds of experiment, I think there is no way to fix the build-in method bugs. So I escape the cmd several times as I show above with "\\ "replace " "and it finally work successfully.
 
 
 ### 2. Syntax highlighting
@@ -242,8 +316,125 @@ Moreover, you can still add your own rules in `.ohsht/rules`. It should meets th
 2. It has a function `match(command:Command) -> bool` to determine whether the command to be fixed matches this situation or rule;
 3. It has a function `get_new_command(command:Command) -> str` to fix the command with your own strategies.
 
+### 5. Auto Doit
+1. Feature 1: register do-this alias
+   
+   In this feature we first check if there is `AD_DB`, if not just init one. Then we check the alias and add into the DB.
+```shell
+os@ubuntu:/data/auto-suggestion$ ad -r yeah echo "沈学姐最帅"
+Alias 'yeah' registered successfully.
+```
+
+2. Feature 2: do the alias with auto-complete.
+
+   In this feature we exec the alias with auto-complete.
+
+```shell
+os@ubuntu:/data/auto-suggestion$ ad y <Tab here>
+os@ubuntu:/data/auto-suggestion$ ad yeah 
+沈学姐最帅
+```
+
+3. Feature 3: remove the alias with auto-complete.
+   
+   In this feature we can remove the alias we set.
+
+```shell
+os@ubuntu:/data/auto-suggestion$ ad -u yeah 
+Alias 'yeah' unregistered successfully.
+```
+
+4. Feature 4. list all alias with color:
+
+```shell
+os@ubuntu:/data/auto-suggestion$ ad -l
+   xzc  echo 太帅了
+  home  cd /home/os
+    hs  history
+ autoS  cd /data/auto-suggestion
+  data  cd /data/
+```
+
+5. Feature 5: push current directory into stack and jump
+
+```shell
+os@ubuntu:/data/auto-suggestion$ ad -p data 
+os@ubuntu:/data$ 
+```
+
+6. Feature 6: pop the stack and jump back
+
+```shell
+os@ubuntu:/data$ ad -o
+os@ubuntu:/data/auto-suggestion$ 
+```
+
+7. Feature 7: clean all alias
+
+```shell
+os@ubuntu:/data/auto-suggestion$ ad -c
+os@ubuntu:/data/auto-suggestion$ ad -l
+  
+os@ubuntu:/data/auto-suggestion$ 
+```
+
+8. Feature 8: help
+
+```shell
+ os@ubuntu:/data/auto-suggestion$ ad -h
+usage: ad [<option>] <alias> [<task>]
+
+default usage:
+  ad <alias> - changes to the task registered for the given alias
+
+OPTIONS:
+  -r, --register: registers an alias
+    ad -r|--register <alias> <task>
+  -u, --unregister: unregisters an alias
+    ad -u|--unregister <alias>
+  -p, --push: pushes the current task onto the stack, then performs ad
+    ad -p|--push <alias>
+  -o, --pop: pops the top task from the stack, then changes to that task
+    ad -o|--pop
+  -l, --list: lists aliases
+    ad -l|--list
+  -c, --cleanup: cleans up all alias
+    ad -c|--cleanup
+  -h, --help: prints this help
+    ad -h|--help
+os@ubuntu:/data/auto-suggestion$ 
+```
+
+First I listen the args from command line and:
+
+1. Check if it is an options or the alias, if not just print error msg (if user is freshman we humanized auto print help)
+2. If it is an options, matching it and go into its function!
+   - -r:
+      - First check if the  *AD_DB* exists, it not, just create one in ~/.config/ad.
+      - Check if the name of new alias exist and legal.
+      - Add the alias into *AD_DB*
+   - -u:
+      - First check if the alias in *AD_DB*, if not, throw error msg
+      - remove the item in *AD_DB*
+   - -p:
+      - check the alias append in args
+      - Push current directory into stack
+      - exec the alias
+   - -o:
+      - If stack is not null, cd in the directory push before
+   - -l:
+      - List all alias in colors
+   - -c:
+      - overwriting the *AD_DB* with empty str.
+   - -h:
+      - Print help info into command line.
+3. If it is alias, then pick it out from *AD_DB* and exec it!
 
 
+
+And the structure of this plugins is well designed, we subtract every operation as function and do the error&warning handling.
+
+What's more, with the experience in **Auto-Suggestions**, I add appropriate auto-suggestions into this plugins. When user press <Tab>, then the alias which satisfied will show below.
 ## Future direction
 
 ### 1. Function Expansion
@@ -272,7 +463,7 @@ At the same time, even though teamwork is not a new thing, it is a new experienc
 
 | ID       | Name   | Division                     |
 | :------- | :----- | :--------------------------- |
-| 11812613 | 香佳宏 | Auto suggestions & ohsh*t    |
+| 11812613 | 香佳宏 | Auto suggestions & auto-doit    |
 | 11812106 | 马永煜 | Syntax highlighting & ohsh*t |
 | 11812425 | 张佳雨 | Auto jump & ohsh*t           |
 
@@ -280,4 +471,6 @@ At the same time, even though teamwork is not a new thing, it is a new experienc
 > https://github.com/zsh-users/zsh-syntax-highlighting  
 > https://github.com/wting/autojump  
 > https://github.com/nvbn/thefuck  
->
+> https://github.com/iridakos/goto/blob/master/goto.sh
+> https://stackoverflow.com/questions/10528695/how-to-reset-comp-wordbreaks-without-affecting-other-completion-script
+> https://iridakos.com/programming/2018/03/01/bash-programmable-completion-tutorial
